@@ -17,7 +17,7 @@ class Resource(collections.Mapping):
         self._hal = cetacean._parse_hal(raw)
 
 
-    def get_uri(self, rel):
+    def get_uri(self, rel, name=None):
         """Gets a URI from the document for a given rel.
 
         :rel: A string matching an expected rel
@@ -30,6 +30,12 @@ class Resource(collections.Mapping):
             rel = unicode(rel)
 
         if rel not in self.links: return None
+
+        if name is not None:
+            for link in self.links[rel]:
+                if name == link['name']:
+                    return link['href']
+            return None
 
         return self.links[rel]['href']
 
